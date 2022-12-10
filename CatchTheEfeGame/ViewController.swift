@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     var counter = 0
     var coinArray = [UIImageView]()
     var hideTimer = Timer()
+    var highScore = 0
     
     
 //    wiews
@@ -34,6 +35,18 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let storedHighScore = UserDefaults.standard.object(forKey: "highscore")
+        
+        if storedHighScore  == nil {
+            highScore = 0
+            highScoreLabel.text = "high Score: \(self.highScore)"
+        }
+        
+        if let newScore = storedHighScore as? Int {
+            highScore = newScore
+            highScoreLabel.text = "high Score: \(self.highScore)"
+        }
         
         scoreLabel.text = "Wallet: \(score)"
         
@@ -115,7 +128,12 @@ class ViewController: UIViewController {
                 coin.isHidden = true
                 
             }
-        
+            
+            if self.score > self.highScore {
+                self.highScore = self.score
+                highScoreLabel.text = "high Score: \(self.highScore)"
+                UserDefaults.standard.set(self.highScore, forKey: "highscore")
+                        }
             
 //            alertt
             let alert = UIAlertController(title: "Timr Is Up", message: "Do You Want To Play Again?", preferredStyle: UIAlertController.Style.alert)
@@ -123,6 +141,16 @@ class ViewController: UIViewController {
             
             let replayButton = UIAlertAction(title: "REPLAY", style: UIAlertAction.Style.default) {
                 (UIAlertAction) in
+                self.score = 0
+                self.scoreLabel.text = "Wallet: \(self.score)"
+                self.counter = 10
+                self.timeLabel.text = String(self.counter)
+                
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.countDown), userInfo: nil, repeats: true)
+                
+                self.hideTimer = Timer.scheduledTimer(timeInterval: 0.4 , target: self, selector: #selector(self.hideCoin), userInfo: nil, repeats: true)
+                
+                
             }
             
             alert.addAction(okButton)
