@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     var timer = Timer()
     var counter = 0
     var coinArray = [UIImageView]()
+    var hideTimer = Timer()
     
     
 //    wiews
@@ -76,6 +77,9 @@ class ViewController: UIViewController {
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(countDown), userInfo: nil, repeats: true)
         
+        hideTimer = Timer.scheduledTimer(timeInterval: 0.4 , target: self, selector: #selector(hideCoin), userInfo: nil, repeats: true)
+        
+        hideCoin()
         
         
         
@@ -84,10 +88,13 @@ class ViewController: UIViewController {
         
     }
     
-    func  hideCoin () {
+    @objc func  hideCoin () {
         for coin in coinArray {
             coin.isHidden = true
         }
+        
+        let random = Int(arc4random_uniform(UInt32(coinArray.count - 1)))
+        coinArray[random].isHidden = false
     }
     
     @objc func increaseScore() {
@@ -102,7 +109,13 @@ class ViewController: UIViewController {
         
         if counter == 0 {
             timer.invalidate()
+            hideTimer.invalidate()
             
+            for coin in coinArray {
+                coin.isHidden = true
+                
+            }
+        
             
 //            alertt
             let alert = UIAlertController(title: "Timr Is Up", message: "Do You Want To Play Again?", preferredStyle: UIAlertController.Style.alert)
