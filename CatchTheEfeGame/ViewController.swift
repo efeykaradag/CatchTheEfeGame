@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     var score = 0
     var timer = Timer()
     var counter = 0
+    var coinArray = [UIImageView]()
     
     
 //    wiews
@@ -33,7 +34,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scoreLabel.text = "score: \(score)"
+        scoreLabel.text = "Wallet: \(score)"
         
         cent1.isUserInteractionEnabled = true
         cent2.isUserInteractionEnabled = true
@@ -66,6 +67,10 @@ class ViewController: UIViewController {
         cent8.addGestureRecognizer(recognizer8)
         cent9.addGestureRecognizer(recognizer9)
         
+        
+        coinArray = [cent1,cent2,cent3,cent4,cent5,cent6,cent7,cent8,cent9]
+        
+        
         counter = 10
         timeLabel.text = String(counter)
         
@@ -77,6 +82,12 @@ class ViewController: UIViewController {
         
         
         
+    }
+    
+    func  hideCoin () {
+        for coin in coinArray {
+            coin.isHidden = true
+        }
     }
     
     @objc func increaseScore() {
